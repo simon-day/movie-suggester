@@ -28,12 +28,13 @@ app.get('/movies', (req, res) => {
     }
 
     console.log('minRating: ', minRating);
+    const countPerPage = 50;
 
-    const url = `https://www.imdb.com/search/title/?title_type=feature&release_date=${start},${end}&user_rating=${minRating},&online_availability=US%2Ftoday%2FAmazon%2Fsubs,US%2Ftoday%2FAmazon%2Fpaid,GB%2Ftoday%2FAmazon%2Fsubs,GB%2Ftoday%2FAmazon%2Fpaid&num_votes=10000,&genres=${genre}&languages=en&view=advanced&count=250`;
+    const url = `https://www.imdb.com/search/title/?title_type=feature&release_date=${start},${end}&user_rating=${minRating},&online_availability=US%2Ftoday%2FAmazon%2Fsubs,US%2Ftoday%2FAmazon%2Fpaid,GB%2Ftoday%2FAmazon%2Fsubs,GB%2Ftoday%2FAmazon%2Fpaid&num_votes=10000,&genres=${genre}&languages=en&view=advanced&count=${countPerPage}`;
 
     (async () => {
       const browser = await puppeteer.launch({
-        headless: true
+        headless: false
         // args: ['--lang=en-GB']
       });
       const page = await browser.newPage();
@@ -48,23 +49,32 @@ app.get('/movies', (req, res) => {
 
       let totalResults;
 
-      if (resultsDescText.split(' ').length === 3) {
+      if (resultsDescText.split(' ').length >= 3) {
         totalResults = resultsDescText.split(' ')[2];
       } else {
         totalResults = resultsDescText.split(' ')[0];
       }
 
       let pageCount = 1;
-      if (totalResults > 250) {
-        pageCount = Math.ceil(totalResults / 250);
+      if (totalResults > countPerPage) {
+        pageCount = Math.ceil(totalResults / countPerPage);
       }
 
+      // first page want 18 if randmPage =
       console.log('pageCount: ', pageCount);
 
-      for (let i = 0; i < pageCount; i++) {
-        const newUrl = `https://www.imdb.com/search/title/?title_type=feature&release_date=${start},${end}&user_rating=${minRating},&online_availability=US%2Ftoday%2FAmazon%2Fsubs,US%2Ftoday%2FAmazon%2Fpaid,GB%2Ftoday%2FAmazon%2Fsubs,GB%2Ftoday%2FAmazon%2Fpaid&num_votes=10000,&genres=${genre}&languages=en&view=advanced&count=250&start=${i *
-          250 +
+      //   let randomPage = 2;
+      let randomPage = Math.floor(Math.random() * pageCount);
+
+      let startPage = randomPage;
+
+      while (Object.keys(movies).length < countPerPage && startPage > -1) {
+        console.log('startPage: ', startPage);
+
+        const newUrl = `https://www.imdb.com/search/title/?title_type=feature&release_date=${start},${end}&user_rating=${minRating},&online_availability=US%2Ftoday%2FAmazon%2Fsubs,US%2Ftoday%2FAmazon%2Fpaid,GB%2Ftoday%2FAmazon%2Fsubs,GB%2Ftoday%2FAmazon%2Fpaid&num_votes=10000,&genres=${genre}&languages=en&view=advanced&count=${countPerPage}&start=${startPage *
+          countPerPage +
           1}`;
+
         await page.goto(newUrl);
 
         await page.evaluate(scrollToBottom);
@@ -77,11 +87,15 @@ app.get('/movies', (req, res) => {
             '.lister-item-header a',
             title => title.text
           );
-          const link = await item.$eval(
-            '.lister-item-header a',
-            link => link.href
+          //   const link = await item.$eval(
+          //     '.lister-item-header a',
+          //     link => link.href
+          //   );
+          const year = await item.$eval(
+            '.lister-item-year',
+            year => year.innerHTML
           );
-
+          const releaseYear = year.replace(/[()]/g, '');
           let imageURL = await item.$eval('img', image => image.src);
 
           const replaceTable = {
@@ -108,9 +122,22 @@ app.get('/movies', (req, res) => {
             '.lister-item-content p:nth-child(4)',
             sum => sum.textContent.trim()
           );
-          await movies.push({ title, link, imageURL, rating, summary });
+          await movies.push({ title, imageURL, releaseYear, rating, summary });
+
+          startPage = pageCount - 2;
         }
+
+        //   const newUrl = `https://www.imdb.com/search/title/?title_type=feature&release_date=${start},${end}&user_rating=${minRating},&online_availability=US%2Ftoday%2FAmazon%2Fsubs,US%2Ftoday%2FAmazon%2Fpaid,GB%2Ftoday%2FAmazon%2Fsubs,GB%2Ftoday%2FAmazon%2Fpaid&num_votes=10000,&genres=${genre}&languages=en&view=advanced&count=${countPerPage}&start=${randomPage *
+        //     countPerPage +
+        //     1}`;
+
+        //   for (let i = 0; i < pageCount; i++) {
+        //     const newUrl = `https://www.imdb.com/search/title/?title_type=feature&release_date=${start},${end}&user_rating=${minRating},&online_availability=US%2Ftoday%2FAmazon%2Fsubs,US%2Ftoday%2FAmazon%2Fpaid,GB%2Ftoday%2FAmazon%2Fsubs,GB%2Ftoday%2FAmazon%2Fpaid&num_votes=10000,&genres=${genre}&languages=en&view=advanced&count=250&start=${i *
+        //       250 +
+        //       1}`;
+        //   await page.goto(newUrl);
       }
+      //   }
 
       await browser.close();
 
@@ -119,6 +146,45 @@ app.get('/movies', (req, res) => {
   };
 
   getMovies();
+});
+
+app.get('/trailer', (req, res) => {
+  res.header('Access-Control-Allow-Origin', 'http://localhost:3000');
+  const { title } = req.query;
+  console.log(req.query);
+  const videoId = '';
+
+  const getTrailer = async () => {
+    console.log('title: ', title);
+
+    const url = `https://www.youtube.com/results?search_query=${title}+trailer`;
+
+    (async () => {
+      const browser = await puppeteer.launch({
+        headless: true
+        // args: ['--lang=en-GB']
+      });
+      const page = await browser.newPage();
+      await page.setExtraHTTPHeaders({
+        'Accept-Language': 'en-US'
+      });
+      await page.goto(url);
+
+      const videoLink = await page.evaluate(
+        () => document.querySelector('#video-title').href
+      );
+
+      //   console.log(videoLink);
+      const s = videoLink.replace('https://www.youtube.com/watch?v=', '');
+      console.log(s);
+
+      await browser.close();
+
+      res.send(s);
+    })();
+  };
+
+  getTrailer();
 });
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));

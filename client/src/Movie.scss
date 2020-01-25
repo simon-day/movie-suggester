@@ -1,4 +1,17 @@
+@import 'node_modules/react-modal-video/scss/modal-video.scss';
 .movie {
   align-items: center;
   text-align: center;
+}
+
+.modal {
+  z-index: 1299 !important;
+}
+
+.ytp-cued-thumbnail-overlay {
+  z-index: 1299 !important;
+}
+
+.card-body {
+  min-height: 300px;
 }
