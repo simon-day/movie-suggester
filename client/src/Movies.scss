@@ -1,0 +1,28 @@
+// .movies {
+//   margin: 0 auto;
+//   text-align: center;
+//   display: flex;
+//   align-content: center;
+//   align-items: center;
+//   flex-wrap: wrap;
+//   width: 80%;
+// }
+
+.movies-container {
+  width: 90%;
+  margin: 50px auto;
+}
+
+.slick-prev,
+.slick-next {
+  color: black !important;
+}
+
+.slick-slider {
+  text-align: center;
+}
+
+.slick-prev:before,
+.slick-next:before {
+  color: black !important;
+}

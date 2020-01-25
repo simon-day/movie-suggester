@@ -1,0 +1,77 @@
+.App {
+  text-align: center;
+  margin: 0 auto;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+button {
+  width: 150px;
+  height: 50px;
+}
+
+.carousel-cell {
+  width: 66%;
+  height: 200px;
+  margin-right: 10px;
+  background: #8c8;
+  border-radius: 5px;
+  counter-increment: carousel-cell;
+}
+
+/* cell number */
+.carousel-cell:before {
+  display: block;
+  text-align: center;
+  content: counter(carousel-cell);
+  line-height: 200px;
+  font-size: 80px;
+  color: white;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+.selected {
+  border: 2px solid;
+}
+
+.movie {
+  width: 80%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  margin: 10px 0;
+  padding: 10px 0;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
