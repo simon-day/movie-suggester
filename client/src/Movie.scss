@@ -4,6 +4,12 @@
   text-align: center;
 }
 
+.more-info {
+  color: blue;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
 .modal {
   z-index: 1299 !important;
 }
@@ -12,6 +18,48 @@
   z-index: 1299 !important;
 }
 
+.btn-info {
+  margin-top: -10px;
+}
+
+@media (min-width: 800px) {
+  .btn-info {
+    margin-top: 30px;
+  }
+}
+
 .card-body {
   min-height: 300px;
+}
+
+.prime-btn {
+  background-color: #fc9900;
+}
+
+.prime-btn:hover {
+  background-color: #d66b00;
+  outline-color: transparent;
+}
+
+.trailer-button {
+  color: white !important;
+  cursor: pointer;
+}
+
+a.btn {
+  border-radius: 0.25rem;
+  border: 1px solid transparent;
+  width: 150px;
+  margin: 5px auto;
+  padding: 0.5rem 1rem;
+  color: #fff;
+}
+a.btn:hover {
+  border-radius: 0.25rem;
+}
+
+a.btn[disabled] {
+  opacity: 0.5;
+  cursor: default;
+  pointer-events: none;
 }

@@ -1,8 +1,68 @@
 @import 'node_modules/react-modal-video/scss/modal-video.scss';
 
+body {
+  background: #fafafa;
+}
+
+.details-modal {
+  background: white;
+  width: 45vw;
+  height: 60vh;
+  text-align: center;
+}
+
+@media (max-width: 500px) {
+  .details-modal {
+    width: 90vw;
+    height: 90vh;
+  }
+}
+
 .App {
   text-align: center;
-  margin: 0 auto;
+  margin-top: 50px auto;
+  padding: 0 15px;
+}
+
+.card-img {
+  width: 100%;
+  object-fit: cover;
+  box-shadow: 10px 10px 10px -10px rgba(0, 0, 0, 0.75);
+  transform: rotate(-2.2deg);
+  background-repeat: no-repeat;
+}
+
+.card {
+  // -webkit-box-shadow: 14px 13px 37px -31px rgba(0, 0, 0, 1);
+  // -moz-box-shadow: 14px 13px 37px -31px rgba(0, 0, 0, 1);
+  // box-shadow: 14px 13px 37px -31px rgba(0, 0, 0, 1);
+  box-shadow: 10px 10px 10px -10px rgba(0, 0, 0, 0.75);
+}
+
+.zoom img:hover {
+  transform: scale(1.1);
+  transition: all ease 500ms;
+}
+
+.error-message {
+  font-weight: bold;
+  color: red;
+}
+
+.footer {
+  position: fixed;
+  font-size: 0.8rem;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  margin-bottom: 10px;
+  background-color: white;
+  padding: 0 15px;
+  text-align: center;
+
+  @media (max-width: 400px) {
+    position: relative;
+  }
 }
 
 .App-logo {
@@ -10,23 +70,15 @@
   pointer-events: none;
 }
 
-button {
-  width: 150px;
-  height: 50px;
+input {
+  outline: none;
 }
 
-a {
-  text-decoration: none;
+button:focus {
+  outline: none !important;
+  -webkit-appearance: none;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
-
-/* Style buttons */
-// .buttonload {
-//   background-color: #4caf50; /* Green background */
-//   border: none; /* Remove borders */
-//   color: white; /* White text */
-//   padding: 12px 16px; /* Some padding */
-//   font-size: 16px; /* Set a font size */
-// }
 
 .carousel-cell {
   width: 66%;
@@ -66,10 +118,6 @@ a {
 
 .App-link {
   color: #61dafb;
-}
-
-.selected {
-  border: 2px solid;
 }
 
 .movie {

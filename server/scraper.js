@@ -61,6 +61,10 @@ const getMovies = async (
           '.lister-item-header a',
           link => link.href
         );
+
+        const imdbId = link.match(/(tt\d{5,7})/gi);
+        console.log(imdbId);
+
         let imageURL = await item.$eval('img', image => image.src);
 
         const replaceTable = {

@@ -10,7 +10,14 @@
 
 .movies-container {
   width: 90%;
-  margin: 50px auto;
+  //   height: 50%;
+  margin: 30px auto;
+}
+
+.card {
+  align-content: center;
+  align-items: center;
+  background-size: 50%;
 }
 
 .slick-prev,
@@ -20,6 +27,11 @@
 
 .slick-slider {
   text-align: center;
+  //   height: 300px;
+}
+
+.slick-dots {
+  bottom: -40px !important;
 }
 
 .slick-prev:before,

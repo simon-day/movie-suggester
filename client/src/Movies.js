@@ -29,7 +29,6 @@ const Movies = ({ movies }) => {
     const vidLink = await axios.get(
       `http://localhost:8000/trailer?title=${currentTitle}`
     );
-    console.log(vidLink.data);
     setTrailerId(vidLink.data);
     setLoadingTrailer(false);
     setCurrentTitle('');
@@ -44,11 +43,13 @@ const Movies = ({ movies }) => {
     }
   }, [currentTitle]);
 
+  const slidesToShowNo = movies.length <= 2 ? movies.length : 3;
+
   var settings = {
-    dots: false,
+    dots: true,
     infinite: true,
     speed: 500,
-    slidesToShow: 3,
+    slidesToShow: slidesToShowNo,
     slidesToScroll: 3,
     nextArrow: <Arrow />,
     prevArrow: <Arrow />,
@@ -57,9 +58,10 @@ const Movies = ({ movies }) => {
         breakpoint: 1024,
         settings: {
           slidesToShow: 3,
+          dots: true,
           slidesToScroll: 3,
-          infinite: true,
-          dots: false
+          infinite: true
+          // dots: false
         }
       },
       {
@@ -67,14 +69,16 @@ const Movies = ({ movies }) => {
         settings: {
           slidesToShow: 2,
           slidesToScroll: 2,
-          initialSlide: 2
+          initialSlide: 2,
+          dots: false
         }
       },
       {
         breakpoint: 480,
         settings: {
           slidesToShow: 1,
-          slidesToScroll: 1
+          slidesToScroll: 1,
+          dots: false
         }
       }
     ]
@@ -85,6 +89,7 @@ const Movies = ({ movies }) => {
       <ModalVideo
         className="modal"
         channel="youtube"
+        autoplay={true}
         isOpen={isOpen}
         videoId={trailerId}
         onClose={() => setIsOpen(false)}
@@ -94,6 +99,8 @@ const Movies = ({ movies }) => {
           {movies.map((movie, i) => (
             <div key={i}>
               <Movie
+                trailerId={trailerId}
+                fetchTrailer={fetchTrailer}
                 currentTitle={currentTitle}
                 loadingTrailer={loadingTrailer}
                 setIsOpen={setIsOpen}
@@ -104,12 +111,6 @@ const Movies = ({ movies }) => {
             </div>
           ))}
         </Slider>
-
-        {/* <div className="movies">
-        {movies.map((movie, i) => (
-          <Movie key={i} movie={movie} />
-        ))}
-      </div> */}
       </div>
     </>
   );

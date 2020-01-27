@@ -1,25 +1,36 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import { firestore } from './utils/firebase';
+// import fetchMoviesFromFirestore from './utils/fetchMoviesFromFirestore';
+// import axios from 'axios';
 
 const dateHashTable = {
-  "'60s": ['1960-01-01', '1969-12-31'],
-  "'70s": ['1970-01-01', '1979-12-31'],
-  "'80s": ['1980-01-01', '1989-12-31'],
-  "'90s": ['1990-01-01', '1999-12-31'],
+  "'10s": ['2010-01-01', '2019-12-31'],
   "'00s": ['2000-01-01', '2009-12-31'],
-  "'10s": ['2010-01-01', '2019-12-31']
+  "'90s": ['1990-01-01', '1999-12-31'],
+  "'80s": ['1980-01-01', '1989-12-31'],
+  "'70s": ['1970-01-01', '1979-12-31'],
+  "'60s": ['1960-01-01', '1969-12-31']
 };
 
 const genreHashTable = {
   Laughs: 'comedy',
   Frights: 'horror',
   Action: 'action',
-  Drama: 'drama'
+  Drama: 'drama',
+  Thrills: 'thriller',
+  Romance: 'romance'
 };
 
-const baseUrl = 'http://localhost:8000/movies';
+// const baseUrl = 'http://localhost:8000/movies';
 
-const MovieFilterSelectionPage = ({ setMovies, setIsLoading }) => {
+const MovieFilterSelectionPage = ({
+  setMovies,
+  setFilteredMovies,
+  setGenre,
+  setPeriod,
+  setIsLoading
+  // movies
+}) => {
   const [filters, setFilters] = useState({
     releaseStart: '1990-01-01',
     releaseEnd: '2019-12-31',
@@ -28,32 +39,63 @@ const MovieFilterSelectionPage = ({ setMovies, setIsLoading }) => {
   const [queryParams, setQueryParams] = useState({});
   const [selectedGenreBtn, setSelectedGenreBtn] = useState('');
   const [selectedPeriodBtn, setSelectedPeriodBtn] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
     if (!Object.keys(queryParams).length) {
-      console.log('Prob');
+      return;
+    }
+    if (!queryParams.type || !selectedPeriodBtn) {
+      setErrorMessage('Must select options!');
       return;
     } else {
+      setErrorMessage('');
       setIsLoading(true);
-      console.log('TEST');
-      axios
-        .get(baseUrl, {
-          params: {
-            releaseStart: queryParams.releaseStart,
-            releaseEnd: queryParams.releaseEnd,
-            type: queryParams.type
-          }
-        })
-        .then(res => {
-          console.log(res);
-          setMovies(res.data);
-          setIsLoading(false);
-        });
+
+      const fetchMoviesFromFirestore = async () => {
+        var docRef = firestore
+          .collection(queryParams.type)
+          .doc(selectedPeriodBtn.slice(1));
+
+        docRef
+          .get()
+          .then(async function(doc) {
+            if (doc.exists) {
+              const noofMovieDocs = doc.data().movies.length;
+              const randomNums = [];
+
+              while (randomNums.length < 12) {
+                let randomIndex = Math.floor(Math.random() * noofMovieDocs);
+                if (randomNums.indexOf(randomIndex) === -1) {
+                  randomNums.push(randomIndex);
+                }
+              }
+
+              const movieData = await doc.data().movies;
+              const filtered = await randomNums.map(num =>
+                movieData.indexOf(num)
+                  ? { ...movieData[num], index: num }
+                  : null
+              );
+              setFilteredMovies(filtered);
+              setMovies(movieData);
+              setIsLoading(false);
+            } else {
+              console.log('No such document!');
+            }
+          })
+          .catch(function(error) {
+            console.log('Error getting document:', error);
+          });
+      };
+
+      fetchMoviesFromFirestore(queryParams.type, selectedPeriodBtn.slice(1));
     }
   }, [queryParams]);
 
   const selectPeriod = e => {
     setSelectedPeriodBtn(e.target.value);
+    setPeriod(e.target.value);
     setFilters({
       ...filters,
       releaseStart: dateHashTable[e.target.value][0],
@@ -63,6 +105,7 @@ const MovieFilterSelectionPage = ({ setMovies, setIsLoading }) => {
 
   const selectGenre = e => {
     setSelectedGenreBtn(e.target.value);
+    setGenre(genreHashTable[e.target.value]);
     setFilters({
       ...filters,
       type: genreHashTable[e.target.value]
@@ -71,11 +114,15 @@ const MovieFilterSelectionPage = ({ setMovies, setIsLoading }) => {
 
   return (
     <div>
-      <h3>I want...</h3>
+      <h3 className="m-2">I want...</h3>
       {Object.keys(genreHashTable).map(btn => (
         <button
           key={btn}
-          className={btn === selectedGenreBtn ? 'selected' : ''}
+          className={
+            btn === selectedGenreBtn
+              ? 'selected btn-primary btn-lg m-2'
+              : 'btn-danger btn-lg m-2'
+          }
           onClick={selectGenre}
           value={btn}
         >
@@ -83,11 +130,15 @@ const MovieFilterSelectionPage = ({ setMovies, setIsLoading }) => {
         </button>
       ))}
 
-      <h3>From the...</h3>
+      <h3 className="m-3">From the...</h3>
       {Object.keys(dateHashTable).map(btn => (
         <button
           key={btn}
-          className={btn === selectedPeriodBtn ? 'selected' : ''}
+          className={
+            btn === selectedPeriodBtn
+              ? 'selected btn-primary btn-lg m-2'
+              : 'btn-info btn-lg m-2'
+          }
           onClick={selectPeriod}
           value={btn}
         >
@@ -105,8 +156,12 @@ const MovieFilterSelectionPage = ({ setMovies, setIsLoading }) => {
           });
         }}
       >
-        <h3>Search</h3>
-        <button type="submit">Find Movies</button>
+        <button type="submit" className="mt-4 btn-dark btn-lg">
+          Find Movies
+        </button>
+        {errorMessage && (
+          <p className="lead error-message mt-4">{errorMessage}</p>
+        )}
       </form>
     </div>
   );
