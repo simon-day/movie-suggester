@@ -33,12 +33,14 @@
 }
 
 .prime-btn {
+  display: inline;
   background-color: #fc9900;
+  outline-color: #d66b00;
 }
 
 .prime-btn:hover {
   background-color: #d66b00;
-  outline-color: transparent;
+  outline-color: #d66b00;
 }
 
 .trailer-button {

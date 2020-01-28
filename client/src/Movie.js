@@ -32,9 +32,9 @@ const Movie = ({ loadingTrailer, setCurrentTitle, currentTitle, movie }) => {
               setSelectedMovie={setSelectedMovie}
               setCurrentTitle={setCurrentTitle}
               currentTitle={currentTitle}
+              close={close}
             />
           )}
-          <button onClick={close}>CLOSE</button>
         </div>
       </Modal>
 

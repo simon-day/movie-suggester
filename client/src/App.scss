@@ -1,14 +1,47 @@
 @import 'node_modules/react-modal-video/scss/modal-video.scss';
 
-body {
-  background: #fafafa;
+#movies img,
+#movie img {
+  width: 100%;
 }
 
+@media (min-width: 960px) {
+  #movies .col-md-3 .well {
+    height: 390px;
+  }
+
+  #movies .col-md-3 img {
+    height: 240px;
+  }
+}
+
+// body {
+//   background: #fafafa;
+// }
+
 .details-modal {
-  background: white;
-  width: 45vw;
-  height: 60vh;
-  text-align: center;
+  // background: white;
+  width: 70vw;
+  height: 75vh;
+  background: #fafafa;
+  margin: 0 auto;
+  padding: 30px 0;
+  // text-align: center;
+  // margin: 0 auto;
+  overflow: scroll;
+}
+
+.release-year {
+  color: black;
+  opacity: 0.7;
+}
+
+@media (max-width: 1100px) {
+  .details-modal {
+    width: 80vw;
+    height: 70vh;
+    margin: 0 auto;
+  }
 }
 
 @media (max-width: 500px) {
@@ -16,6 +49,21 @@ body {
     width: 90vw;
     height: 90vh;
   }
+
+  h2 {
+    font-size: 2rem;
+    padding: 5px 0;
+    padding-top: 10px;
+  }
+
+  h3 {
+    font-size: 1.5rem;
+    padding-top: 10px;
+  }
+}
+
+.plot-info {
+  padding: 15px;
 }
 
 .App {
