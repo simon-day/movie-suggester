@@ -23,6 +23,7 @@ const Movies = ({ movies }) => {
   const [currentTitle, setCurrentTitle] = useState('');
   const [loadingTrailer, setLoadingTrailer] = useState(false);
   const [trailerId, setTrailerId] = useState('');
+  const [movieDetailsOpen, setMovieDetailsOpen] = useState(false);
 
   const fetchTrailer = async () => {
     setLoadingTrailer(true);
@@ -99,6 +100,7 @@ const Movies = ({ movies }) => {
           {movies.map((movie, i) => (
             <div key={i}>
               <Movie
+                setMovieDetailsOpen={setMovieDetailsOpen}
                 trailerId={trailerId}
                 fetchTrailer={fetchTrailer}
                 currentTitle={currentTitle}

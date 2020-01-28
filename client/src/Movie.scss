@@ -32,6 +32,10 @@
   min-height: 300px;
 }
 
+.card-img {
+  pointer-events: none;
+}
+
 .prime-btn {
   display: inline;
   background-color: #fc9900;

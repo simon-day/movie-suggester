@@ -2,22 +2,9 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { useEffect, useCallback } from 'react';
 
-const MovieDetails = ({
-  movie,
-  loadingTrailer,
-  close,
-  setCurrentTitle,
-  currentTitle
-}) => {
-  const { title, rating, releaseYear, imdbId } = movie;
+const MovieDetails = ({ movie, close }) => {
+  const { title, imdbId } = movie;
   const [movieInfo, setMovieInfo] = useState({});
-
-  const titleToCheck = `${title} ${releaseYear}`;
-
-  const buttonText =
-    loadingTrailer && titleToCheck === currentTitle
-      ? ' Loading'
-      : 'Watch Trailer';
 
   const escFunction = useCallback(event => {
     if (event.keyCode === 27) {
@@ -51,7 +38,6 @@ const MovieDetails = ({
 
   useEffect(() => {
     document.addEventListener('keydown', escFunction, false);
-
     return () => {
       document.removeEventListener('keydown', escFunction, false);
     };
@@ -62,19 +48,15 @@ const MovieDetails = ({
   if (infoLoaded) {
     const {
       Runtime,
-      budget,
       Genre,
       Director,
       Actors,
       Poster,
       Plot,
-      Awards,
       Title,
-      Language,
       imdbRating,
       Ratings,
-      Released,
-      revenue
+      Released
     } = movieInfo;
 
     return (
@@ -89,6 +71,9 @@ const MovieDetails = ({
               <ul className="list-group">
                 <li className="list-group-item">
                   <strong>Genre:</strong> {Genre}
+                </li>
+                <li className="list-group-item">
+                  <strong>Runtime:</strong> {Runtime}utes
                 </li>
                 <li className="list-group-item">
                   <strong>Released:</strong> {Released}
@@ -111,27 +96,14 @@ const MovieDetails = ({
                 <h3>Plot</h3>
                 {Plot}
                 <hr />
-                <a
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  href={`https://www.amazon.com/s?tag=movie-suggest-20&k=${title}&i=movies-tv-intl-ship&ref=nb_sb_noss?tag=movie-suggest-20`}
-                  className="btn prime-btn btn-primary"
-                >
-                  Watch on Prime
-                </a>
-                <a
-                  href="#!"
-                  disabled={loadingTrailer}
-                  className="btn btn-primary trailer-button"
-                  onClick={() => {
-                    setCurrentTitle(`${title} ${releaseYear}`);
-                  }}
-                >
-                  {loadingTrailer && buttonText === ' Loading' && (
-                    <i className="fa fa-spinner fa-spin"></i>
-                  )}
-                  {buttonText}
-                </a>
+                <div className="row">
+                  <button
+                    className="btn m-2 btn-block btn-primary"
+                    onClick={() => close()}
+                  >
+                    Close Info
+                  </button>
+                </div>
               </div>
             </div>
           </div>

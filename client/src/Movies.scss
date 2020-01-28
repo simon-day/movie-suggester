@@ -18,6 +18,7 @@
   align-content: center;
   align-items: center;
   background-size: 50%;
+  touch-action: none;
 }
 
 .slick-prev,
@@ -27,8 +28,21 @@
 
 .slick-slider {
   text-align: center;
+  // pointer-events: none;
   //   height: 300px;
 }
+
+// .close-btn {
+//   align-content: center;
+//   align-items: center;
+//   text-align: center;
+// height: 50px;
+// width: 70px !important;
+// }
+
+// .slick-slide {
+//   pointer-events: none;
+// }
 
 .slick-dots {
   bottom: -40px !important;
@@ -38,3 +52,12 @@
 .slick-next:before {
   color: black !important;
 }
+
+// .inactive {
+//   pointer-events: none; // pointer-events not supported below IE11
+//   position: fixed;
+// }
+
+// .sortable-handler {
+//   touch-action: none;
+// }

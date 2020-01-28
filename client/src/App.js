@@ -75,11 +75,15 @@ class App extends Component {
     return (
       <>
         <div className="App">
-          <h2 className="display-4 mt-2">Movie Suggester</h2>
-          <p className="lead">
-            Select what you're in the mood for and get a random selection of
-            highly rated IMDB movies matching your choices!
-          </p>
+          {!filteredMovies.length && (
+            <h2 className="display-4 mt-2">Movie Suggester</h2>
+          )}
+          {!filteredMovies.length && !isLoading && (
+            <p className="lead">
+              Select what you're in the mood for and get a random selection of
+              highly rated IMDB movies matching your choices!
+            </p>
+          )}
           {!!filteredMovies.length && (
             <button
               onClick={() => this.resetFilters()}

@@ -5,7 +5,13 @@ import useModal from 'react-hooks-use-modal';
 // import './styles.module.css';
 // import TrailerModal from './TrailerModal';
 
-const Movie = ({ loadingTrailer, setCurrentTitle, currentTitle, movie }) => {
+const Movie = ({
+  loadingTrailer,
+  setCurrentTitle,
+  currentTitle,
+  movie,
+  setMovieDetailsOpen
+}) => {
   let { title, releaseYear, imageURL, summary } = movie;
   const titleToCheck = `${title} ${releaseYear}`;
   const [Modal, open, close] = useModal('root');
@@ -17,8 +23,8 @@ const Movie = ({ loadingTrailer, setCurrentTitle, currentTitle, movie }) => {
       ? ' Loading'
       : 'Watch Trailer';
 
-  if (summary.length > 180) {
-    summary = summary.substr(0, 170) + '...';
+  if (summary.length > 100) {
+    summary = summary.substr(0, 96) + '... ';
   }
 
   return (
@@ -27,6 +33,7 @@ const Movie = ({ loadingTrailer, setCurrentTitle, currentTitle, movie }) => {
         <div className="details-modal">
           {selectedMovie && (
             <MovieDetails
+              setMovieDetailsOpen={setMovieDetailsOpen}
               movie={movie}
               loadingTrailer={loadingTrailer}
               setSelectedMovie={setSelectedMovie}
@@ -50,12 +57,13 @@ const Movie = ({ loadingTrailer, setCurrentTitle, currentTitle, movie }) => {
                 {summary}{' '}
                 <span
                   onClick={() => {
+                    setMovieDetailsOpen(true);
                     setSelectedMovie(title);
                     open();
                   }}
                   className="more-info"
                 >
-                  <a href="#!">...More Info</a>
+                  <a href="#!"> More Info</a>
                 </span>
               </p>
 
