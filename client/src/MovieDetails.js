@@ -59,6 +59,14 @@ const MovieDetails = ({ movie, close }) => {
       Released
     } = movieInfo;
 
+    const getRottenTomatosRating = () => {
+      const tomatoRating = Ratings.filter(
+        rating => rating.Source === 'Rotten Tomatoes'
+      ).map(res => res.Value);
+
+      return tomatoRating.length ? tomatoRating : 'N/A';
+    };
+
     return (
       <div className="container">
         <div id="movie">
@@ -83,7 +91,7 @@ const MovieDetails = ({ movie, close }) => {
                   <strong>IMDB Rating:</strong> {imdbRating}
                 </li>
                 <li className="list-group-item">
-                  <strong>Rotten Tomatoes:</strong> {Ratings[1].Value}
+                  <strong>Rotten Tomatoes:</strong> {getRottenTomatosRating()}
                 </li>
                 <li className="list-group-item">
                   <strong>Director:</strong> {Director}
@@ -109,27 +117,6 @@ const MovieDetails = ({ movie, close }) => {
           </div>
         </div>
       </div>
-
-      //   {/* <div className="row">
-      //     <div className="well">
-      //       <h3>Plot:</h3>
-      //       {Plot}
-      //       <hr />
-      // <a
-      //   href="#!"
-      //   disabled={loadingTrailer}
-      //   className="btn btn-sm btn-primary trailer-button"
-      //   onClick={() => {
-      //     setCurrentTitle(`${title} ${releaseYear}`);
-      //   }}
-      // >
-      //   {loadingTrailer && buttonText === ' Loading' && (
-      //     <i className="fa fa-spinner fa-spin"></i>
-      //   )}
-      //   {buttonText}
-      // </a>
-      //     </div>
-      //   </div> */}
     );
   }
 

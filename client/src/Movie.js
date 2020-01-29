@@ -2,8 +2,6 @@ import React, { useState } from 'react';
 import './Movie.scss';
 import MovieDetails from './MovieDetails';
 import useModal from 'react-hooks-use-modal';
-// import './styles.module.css';
-// import TrailerModal from './TrailerModal';
 
 const Movie = ({
   loadingTrailer,
@@ -70,7 +68,7 @@ const Movie = ({
               <a
                 target="_blank"
                 rel="noopener noreferrer"
-                href={`https://www.amazon.com/s?tag=movie-suggest-20&k=${title}&i=movies-tv-intl-ship&ref=nb_sb_noss?tag=movie-suggest-20`}
+                href={`https://www.amazon.com/s?k=${title}&i=movies-tv-intl-ship&ref=nb_sb_noss`}
                 className="btn prime-btn btn-block btn-primary btn-sm mt-auto"
               >
                 Watch on Prime
@@ -90,7 +88,6 @@ const Movie = ({
                   {buttonText}
                 </a>
               </div>
-              {/* <p className="card-text"></p> */}
             </div>
           </div>
         </div>

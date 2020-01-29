@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { firestore } from './utils/firebase';
-// import fetchMoviesFromFirestore from './utils/fetchMoviesFromFirestore';
-// import axios from 'axios';
 
 const dateHashTable = {
   "'10s": ['2010-01-01', '2019-12-31'],
@@ -21,15 +19,12 @@ const genreHashTable = {
   Romance: 'romance'
 };
 
-// const baseUrl = 'http://localhost:8000/movies';
-
 const MovieFilterSelectionPage = ({
   setMovies,
   setFilteredMovies,
   setGenre,
   setPeriod,
   setIsLoading
-  // movies
 }) => {
   const [filters, setFilters] = useState({
     releaseStart: '1990-01-01',

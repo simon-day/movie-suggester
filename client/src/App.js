@@ -1,11 +1,8 @@
 import React, { Component } from 'react';
-// import { Switch, Route } from 'react-router-dom';
 import './App.scss';
 import MovieFilterSelectionPage from './MovieFilterSelectionPage';
 import Movies from './Movies';
 import LoadingSpinner from './LoadingSpinner';
-
-// import Pagination from './Pagination';
 
 class App extends Component {
   state = {
@@ -118,14 +115,10 @@ class App extends Component {
           )}
           {!!allMovies.length && (
             <button className="btn btn-info mb-5" onClick={this.getMoreMovies}>
-              Load more {`${period} ${genre} Movies`}{' '}
+              <i className="fas fa-random"></i> More{' '}
+              {`${period} ${genre} movies`}{' '}
             </button>
           )}
-        </div>
-        <div className="footer">
-          We are a participant in the Amazon Services LLC Associates Program, an
-          affiliate advertising program designed to provide a means for us to
-          earn fees by linking to Amazon.com and affiliated sites.
         </div>
       </>
     );
