@@ -6,6 +6,7 @@ import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import Slider from 'react-slick';
 import ModalVideo from 'react-modal-video';
+import youtube from './youtubeApi';
 
 function Arrow(props) {
   const { className, style, onClick } = props;
@@ -27,10 +28,29 @@ const Movies = ({ movies }) => {
 
   const fetchTrailer = async () => {
     setLoadingTrailer(true);
-    const vidLink = await axios.get(
-      `http://localhost:8000/trailer?title=${currentTitle}`
+
+    // const response = await youtube.get('/search', {
+    //   params: {
+    //     q: currentTitle
+    //   }
+    // });
+
+    const res = await axios.get(
+      'https://www.googleapis.com/youtube/v3/search',
+      {
+        params: {
+          key: process.env.REACT_APP_YT_KEY,
+          type: 'video',
+          part: 'snippet',
+          maxResults: 1,
+          q: currentTitle
+        }
+      }
     );
-    setTrailerId(vidLink.data);
+
+    // console.log(res.data.items[0].id.videoId);
+
+    setTrailerId(res.data.items[0].id.videoId);
     setLoadingTrailer(false);
     setCurrentTitle('');
     setIsOpen(true);
